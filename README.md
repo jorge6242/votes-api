@@ -13,6 +13,9 @@ This is the fullstack boilerplate for AdonisJs, it comes pre-configured with.
 
 ## Setup
 
+### Install mysql and create adonis database
+
+### create .env file and replace with .env.example
 
 ### Install Project
 ```bash
