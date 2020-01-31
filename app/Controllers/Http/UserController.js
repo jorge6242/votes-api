@@ -4,10 +4,16 @@
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
+const UserService = use('App/Services/UserService');
+
 /**
  * Resourceful controller for interacting with users
  */
 class UserController {
+
+  constructor() {
+    this.UserService = new UserService()
+  }
   /**
    * Show a list of all users.
    * GET users
@@ -18,29 +24,8 @@ class UserController {
    * @param {View} ctx.view
    */
   async index ({ request, response, view }) {
-  }
-
-  /**
-   * Render a form to be used for creating a new user.
-   * GET users/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
-  }
-
-  /**
-   * Create/save a new user.
-   * POST users
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async store ({ request, response }) {
+    let user = await this.UserService.index()
+    return response.json(user)
   }
 
   /**
@@ -52,20 +37,11 @@ class UserController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
+  async show ({ params, response }) {
+    const book = await this.UserService.read(params.id)
+    return response.json(book)
   }
 
-  /**
-   * Render a form to update an existing user.
-   * GET users/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
 
   /**
    * Update user details.
@@ -76,18 +52,20 @@ class UserController {
    * @param {Response} ctx.response
    */
   async update ({ params, request, response }) {
+    const { id } = params;
+    const { username, email, password, age } = request.post()
+    return await this.UserService.update({ id, body: { username, email, password, age } })
   }
 
-  /**
-   * Delete a user with id.
-   * DELETE users/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
+    /**
+   * Check user email.
    */
-  async destroy ({ params, request, response }) {
+  async checkEmail ({ params, request, response }) {
+    const { email } = params
+    const checkStatus = await this.UserService.checkEmail(email)
+    return response.json(checkStatus)
   }
+
 }
 
 module.exports = UserController
