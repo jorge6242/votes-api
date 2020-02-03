@@ -33,3 +33,7 @@ adonis seed --files='DatabaseSeeder.js'
 ```bash
 adonis serve --dev
 ```
+
+### Users Test
+
+## user: user1@user.com - password: 123456
